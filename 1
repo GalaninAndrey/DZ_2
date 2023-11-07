@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+
+namespace DZ2
+{
+    public class Node<T>
+    {
+        public T Data { get; set; } 
+        public Node<T> Next { get; set; }
+
+        public Node(T data)
+        {
+            Data = data;
+        }
+
+    }
+    public class MyStack<T>
+    {
+        private Node<T> top;
+        private int size;
+
+        public MyStack()  
+        {
+            top = null;
+            size = 0; 
+        }
+
+        public void Push(T value)
+        {
+            Node<T> newNode = new Node<T>(value);
+            newNode.Next = top; // указывает на ту же область память, что и топ 
+            top = newNode; // перемещаем топ на эту ноду
+            size++;
+        }
+
+        public T Pop()
+        {
+            Node<T> temp = top; //временная нода указывает на тот же элемент что и топ
+            top = top.Next; // перемещаем указатель на элемент на который указывает топ
+            size--;
+            return temp.Data;
+        }
+
+        public T Back()
+        {
+            return top.Data;
+        }
+
+        public int Size()
+        {
+            return size;
+        }
+
+        public void Clear()
+        {
+            while(size != 0)
+            {
+                Pop();
+            }
+        }
+
+        public void Print()
+        {
+            Node<T> temp = top;
+            while (temp != null)
+            {
+                Console.Write(temp.Data+" ");
+                top = top.Next;
+            }
+        }
+    }
+    class Work
+    {
+        static void Main()
+        {
+            MyStack<int> stack = new MyStack<int>();
+            string[] Change;
+            do
+            {
+                Change = Console.ReadLine().Split(' ');
+                switch (Change[0])
+                {
+                    case "push":
+                        int value = int.Parse(Change[1]);
+                        stack.Push(value);
+                        Console.WriteLine("ok");
+                        break;
+                    case "pop":
+                        Console.WriteLine(stack.Pop());
+                        break;
+                    case "back":
+                        Console.WriteLine(stack.Back());
+                        break;
+                    case "size":
+                        Console.WriteLine(stack.Size());
+                        break;
+                    case "clear":
+                        stack.Clear();
+                        Console.WriteLine("ok");
+                        break;
+                    case "print":
+                        stack.Print();
+                        break;
+                    case "exit":
+                        Console.WriteLine("bye");
+                        break;
+                    default:
+                        Console.WriteLine("Неверно введена команда");
+                        break;
+                }
+            } while (Change[0] != "exit");
+        }
+    }
+}

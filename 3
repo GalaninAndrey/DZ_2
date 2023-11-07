@@ -1,0 +1,108 @@
+using System;
+using System.Drawing;
+
+namespace DZ2
+{
+    public class Node<T>
+    {
+        public T Data { get; set; }
+        public Node<T> Next { get; set; }
+
+        public Node(T data)
+        {
+            Data = data;
+        }
+    }
+
+    public class MyStack<T>
+    {
+        private Node<T> top;
+        public int size;
+
+        public MyStack()
+        {
+            top = null;
+            size = 0;
+        }
+
+        public int Size()
+        {
+            return size;
+        }
+
+        public void Push(T data)
+        {
+            Node<T> newNode = new Node<T>(data);
+            newNode.Next = top;
+            top = newNode;
+            size++;
+        }
+
+        public T Back()
+        {
+            return top.Data;
+        }
+
+        public T Pop()
+        {
+            if (size == 0)
+            {
+                throw new InvalidOperationException();
+            }
+            Node<T> temp = top;
+            top = top.Next;
+            size--;
+            return temp.Data;
+        }
+
+        public void Clear()
+        {
+            while (size != 0)
+            {
+                Pop();
+            }
+        }
+    }
+
+    public class Work
+    {
+        public static bool Check(string stroka) // static чтобы не создавать экземпляр класса, вне его вызывать 
+        {
+            MyStack<char> myStack = new MyStack<char>();
+            int Close = 0;
+            foreach (char value in stroka.ToCharArray())
+            {
+                if (value == '(')
+                { 
+                    myStack.Push(value);
+                }
+                else if (value == ')')
+                {
+                    Close++;
+                    try
+                    {
+                        myStack.Pop();
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Console.WriteLine("Лишняя {0} закрывающая скобка", Close);
+                        return false;
+                    }
+                }
+            }
+            if (myStack.size != 0)
+            {
+                Console.WriteLine(" Количество лишних открывающих скобок : {0}", myStack.Size());
+                return false;
+            }
+            Console.WriteLine("Скобки расставлены верно");
+            return true;
+        }
+
+        static void Main()
+        {
+            string stroka = Console.ReadLine();
+            Check(stroka);
+        }
+    }
+}

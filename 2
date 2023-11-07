@@ -1,0 +1,124 @@
+using System;
+using System.Collections.Generic;
+
+namespace DZ2
+{
+    public class Node<T>
+    {
+        public T Data { get; set; }
+        public Node<T> Next { get; set; }
+
+        public Node(T data)
+        {
+            Data = data;
+        }
+
+    }
+    public class MyQueue<T>
+    {
+        private Node<T> head;
+        private Node<T> tail;
+        private int size;
+
+        public MyQueue()
+        {
+            head = null;
+            tail = null;
+            size = 0;
+        }
+
+        public void Push(T value)
+        {
+            Node<T> newNode = new Node<T>(value);
+            Node<T> tempNode = tail;
+            tail = newNode;
+            if (size == 0)
+            {
+                head = tail;
+            }
+            else
+            {
+                tempNode.Next = tail; // tempNode.Next обращаемся к элменты на который указываем 
+            }
+            size++;
+        }
+
+        public T Pop()
+        {
+            T OutData = head.Data;
+            head = head.Next;
+            size--;
+            return OutData;
+        }
+
+        public T Front()
+        {
+            return head.Data;
+        }
+
+        public int Size()
+        {
+            return size;
+        }
+
+        public void Clear()
+        {
+            while (size != 0)
+            {
+                Pop();
+            }
+        }
+
+        public void Print()
+        {
+            Node<T> temp = head;
+            while (temp != null)
+            {
+                Console.Write(temp.Data + " ");
+                head = head.Next;
+            }
+        }
+    }
+    class Work
+    {
+        static void Main()
+        {
+            MyQueue<int> stack = new MyQueue<int>();
+            string[] Change;
+            do
+            {
+                Change = Console.ReadLine().Split(' ');
+                switch (Change[0])
+                {
+                    case "push":
+                        int value = int.Parse(Change[1]);
+                        stack.Push(value);
+                        Console.WriteLine("ok");
+                        break;
+                    case "pop":
+                        Console.WriteLine(stack.Pop());
+                        break;
+                    case "front":
+                        Console.WriteLine(stack.Front());
+                        break;
+                    case "size":
+                        Console.WriteLine(stack.Size());
+                        break;
+                    case "clear":
+                        stack.Clear();
+                        Console.WriteLine("ok");
+                        break;
+                    case "print":
+                        stack.Print();
+                        break;
+                    case "exit":
+                        Console.WriteLine("bye");
+                        break;
+                    default:
+                        Console.WriteLine("Неверно введена команда");
+                        break;
+                }
+            } while (Change[0] != "exit");
+        }
+    }
+}
